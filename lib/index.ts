@@ -1,6 +1,6 @@
 import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-import { YMap } from 'yjs/dist/src/internals'
+import { IndexeddbPersistence } from 'y-indexeddb'
 /**
 * @Class: The filesystem class to instantiate
 */
@@ -8,7 +8,15 @@ export class YjsFilesystem {
 
   public room: string
   private ydoc: Y.Doc
+  /**
+   * pass in any Providers that are of AbstractConnector type
+   */
   private providers: Array<Y.AbstractConnector>
+  /**
+   * if true, yjs will use indexeddb to store the document locally and make it available immediately
+   */
+  private useIndexeddb: boolean
+  private indexeddb
   /** 
    * Contains all file meta data
    */
@@ -24,22 +32,35 @@ export class YjsFilesystem {
   private folders: Array<string>
   //private onlyTextFiles: boolean
 
+  /**
+   * 
+   * @param params you can pass all or any parameter or just create it empty.
+   * If you want to pass additional Providers, you have to:
+   *   * first create a room name and a ydoc
+   *   * then the providers
+   *   * and then pass all of those as parameters
+   */
   constructor(params: YjsFilesystem = {} as YjsFilesystem){
     let {
         room = (Math.floor(Math.random() * 100) + 1).toString(),
         ydoc = new Y.Doc(),
         providers = [new WebrtcProvider(room, ydoc)],
+        useIndexeddb = true,
         folders = ["/"]
         //onlyTextFiles = true
     } = params
-
-    this.ydoc = ydoc
-    this.fileMeta = ydoc.getMap('fileNames')
-    this.files = ydoc.getMap('files')
     this.room = room
+    this.ydoc = ydoc
     this.providers = providers
+    this.useIndexeddb = useIndexeddb
     this.folders = folders
     //this.onlyTextFiles = onlyTextFiles
+    if(useIndexeddb) {
+      this.indexeddb = new IndexeddbPersistence(room, ydoc)
+    }
+    
+    this.fileMeta = ydoc.getMap('fileNames')
+    this.files = ydoc.getMap('files')
   }
   /**
    * Returns the file id as string
@@ -65,6 +86,10 @@ export class YjsFilesystem {
       }
     }
     return fileList
+  }
+
+  observeFileList(callback: () => void): void {
+    this.fileMeta.observe(callback)
   }
   /**
    * Returns the content of a file as Y.Text

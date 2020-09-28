@@ -31,6 +31,7 @@
   "dependencies": {
     "yjs": "^13.3.2",
     "y-webrtc": "^10.1.6",
+    "y-indexeddb": "^9.0.5",
     "rollup": "^1.32.1"
   }
 }
