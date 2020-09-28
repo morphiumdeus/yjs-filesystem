@@ -1,0 +1,36 @@
+{
+  "name": "yjs-filesystem",
+  "version": "0.0.1",
+  "description": "A module that creates a virtual filesystem with Textfiles based on [yjs](https://yjs.dev) shared editing framework. Basically, it's just a Map of filepath/name to a Y.Text(), all in a Y.Doc() and some helper functions to create, rename, move, delete.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morphiumdeus/yjs-filesystem.git"
+  },
+  "keywords": [],
+  "author": "Morphium Deus",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/morphiumdeus/yjs-filesystem/issues"
+  },
+  "homepage": "https://github.com/morphiumdeus/yjs-filesystem#readme",
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "@types/pluralize": "0.0.29",
+    "chai": "^4.1.2",
+    "mocha": "^8.1.3",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "yjs": "^13.3.2",
+    "y-webrtc": "^10.1.6",
+    "rollup": "^1.32.1"
+  }
+}
